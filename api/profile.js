@@ -6,10 +6,10 @@ import { allowCors } from "./utils/cors.js";
 
 export default async function handler(req, res) {
   allowCors(res);
+  
   if (req.method === "OPTIONS") {
-  return res.status(200).end();
-}
-
+    return res.status(200).end();
+  }
 
   if (req.method !== "GET") {
     return res.status(405).json({ message: "Method not allowed" });
@@ -17,9 +17,18 @@ export default async function handler(req, res) {
 
   try {
     await connectDB();
-    const { id } = verifyToken(req);
+    
+    // Check if verifyToken is getting the header correctly
+    const decoded = verifyToken(req); 
+    if (!decoded || !decoded.id) {
+       return res.status(401).json({ message: "Invalid Token" });
+    }
 
-    const user = await User.findById(id).select("-password");
+    const user = await User.findById(decoded.id).select("-password");
+
+    if (!user) {
+      return res.status(404).json({ message: "User not found" });
+    }
 
     res.json({
       email: user.email,
@@ -27,6 +36,7 @@ export default async function handler(req, res) {
       subscribed: user.subscribed
     });
   } catch (err) {
-    res.status(401).json({ message: "Unauthorized" });
+    console.error("Profile Error:", err.message); // This shows up in Vercel Logs!
+    res.status(401).json({ message: "Unauthorized", error: err.message });
   }
 }

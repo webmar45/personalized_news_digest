@@ -4,30 +4,42 @@ import { verifyToken } from "./utils/auth.js";
 import { allowCors } from "./utils/cors.js";
 
 
+// api/updateTopic.js
 export default async function handler(req, res) {
   allowCors(res);
-  if (req.method === "OPTIONS") {
-  return res.status(200).end();
-}
+  if (req.method === "OPTIONS") return res.status(200).end();
 
-
-  if (!["POST", "PUT"].includes(req.method)) {
+  // Allow POST, PUT, or PATCH
+  if (!["POST", "PUT", "PATCH"].includes(req.method)) {
     return res.status(405).json({ message: "Method not allowed" });
   }
 
   try {
     await connectDB();
-    const { id } = verifyToken(req);
+    
+    // Verify user
+    const decoded = verifyToken(req);
+    const userId = decoded.id;
 
+    // Destructure data safely
     const { topics, subscribed } = req.body;
 
-    await User.findByIdAndUpdate(id, {
-      topics,
-      subscribed
-    });
+    // Use { new: true } to get the updated document back if you need it
+    const updatedUser = await User.findByIdAndUpdate(
+      userId, 
+      { topics, subscribed },
+      { new: true } 
+    );
 
-    res.json({ success: true });
+    if (!updatedUser) {
+      return res.status(404).json({ message: "User not found" });
+    }
+
+    res.json({ success: true, user: updatedUser });
   } catch (err) {
-    res.status(401).json({ message: "Unauthorized" });
+    console.error("Update Error:", err.message);
+    // If it's a JWT error, return 401. Otherwise, return 500.
+    const status = err.name === "JsonWebTokenError" ? 401 : 500;
+    res.status(status).json({ message: err.message || "Update failed" });
   }
 }
