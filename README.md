@@ -95,7 +95,7 @@ personalized-news-digest/
 │
 ├── vercel.json                 # Cron and routing configuration
 ├── package.json
-├── buil-and-move.js            #helper script
+├── build-and-move.js            #helper script
 └── README.md
 ```
 
