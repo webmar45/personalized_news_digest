@@ -3,7 +3,7 @@ import axios from 'axios';
 
 const API = axios.create({
   // Use relative path for production, localhost for dev
-  baseURL: import.meta.env.VITE_API_URL || '/api', 
+  baseURL: '/api', 
 });
 
 export default API;
