@@ -1,13 +1,9 @@
-import axios from "axios";
+// frontend/src/services/api.js
+import axios from 'axios';
 
-const API = window.location.origin.includes('localhost') 
-  ? 'http://localhost:5000/api' 
-  : '/api';
-
-API.interceptors.request.use((req) => {
-  const token = localStorage.getItem("token");
-  if (token) req.headers.Authorization = `Bearer ${token}`;
-  return req;
+const API = axios.create({
+  // Use relative path for production, localhost for dev
+  baseURL: import.meta.env.VITE_API_URL || '/api', 
 });
 
 export default API;
