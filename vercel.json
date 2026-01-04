@@ -7,7 +7,7 @@
   "crons": [
     {
       "path": "/api/cronDigest",
-      "schedule": "0 */12 * * *"
+      "schedule": "0 9 0 0 0"
     }
   ]
 }
