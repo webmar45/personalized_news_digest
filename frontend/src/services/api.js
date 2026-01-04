@@ -1,8 +1,8 @@
 import axios from "axios";
 
-const API = import.meta.env.PROD
-  ? "/api"
-  : "http://localhost:3000/api";
+const API = window.location.origin.includes('localhost') 
+  ? 'http://localhost:5000/api' 
+  : '/api';
 
 API.interceptors.request.use((req) => {
   const token = localStorage.getItem("token");
