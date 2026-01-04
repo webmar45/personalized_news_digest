@@ -4,7 +4,8 @@
   "version": "1.0.0",
   "main": "index.js",
   "scripts": {
-    "build": "node build-and-move.js"
+    "build": "node build-and-move.js",
+    "dev": "vercel dev"
   },
   "keywords": [],
   "author": "",
