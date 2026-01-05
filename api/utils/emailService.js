@@ -8,8 +8,8 @@ const transporter = nodemailer.createTransport({
   }
 });
 
-export async function sendMail(to, subject, html) {
-  await transporter.sendMail({
+export async function sendEmail(to, subject, html) {
+  await transporter.sendEmail({
     from: `"News Digest" <${process.env.EMAIL_USER}>`,
     to,
     subject,
