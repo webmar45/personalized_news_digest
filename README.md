@@ -1,9 +1,3 @@
-Since you have successfully transitioned from Brevo to **Nodemailer**, your README definitely needs an update! Keeping your documentation accurate is a sign of a professional developer.
-
-Here is a refreshed version of your README that reflects your current tech stack. I've updated the architecture, environment variables, and email service sections to match your working Nodemailer setup.
-
----
-
 # 📰 Personalized News Digest Service
 
 A **serverless web application** that delivers **personalized news digests** to users via email based on their selected topics. This project demonstrates a full-stack implementation of secure authentication, external API integration, and automated scheduling on **Vercel**.
