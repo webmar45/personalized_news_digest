@@ -1,210 +1,103 @@
+Since you have successfully transitioned from Brevo to **Nodemailer**, your README definitely needs an update! Keeping your documentation accurate is a sign of a professional developer.
+
+Here is a refreshed version of your README that reflects your current tech stack. I've updated the architecture, environment variables, and email service sections to match your working Nodemailer setup.
+
+---
+
 # 📰 Personalized News Digest Service
 
-A **serverless web application** that delivers **personalized news digests** to users via email based on their selected topics. The system supports **manual and automated email delivery**, secure authentication, and is fully deployed on **Vercel** using **serverless functions and cron jobs**.
+A **serverless web application** that delivers **personalized news digests** to users via email based on their selected topics. This project demonstrates a full-stack implementation of secure authentication, external API integration, and automated scheduling on **Vercel**.
 
 ---
 
 ## 📌 Project Overview
 
-Many users struggle to keep up with news relevant to their interests. This project solves that problem by allowing users to:
+Many users find it difficult to curate news relevant to their specific interests. This application provides a central dashboard where users can:
 
-* Select preferred news topics
-* Receive curated news articles via email
-* Control subscription preferences
-* Get updates automatically or on demand
-
-The application is designed using a **modern full-stack, serverless architecture**.
+* **Customize Topics:** Follow specific interest areas (e.g., Technology, Health, Sports).
+* **Automated Delivery:** Receive curated headlines directly in their inbox.
+* **On-Demand Updates:** Trigger a "Send Now" digest manually from the dashboard.
 
 ---
 
 ## ✨ Key Features
 
-### 1️⃣ User Authentication
-
-* User registration and login
-* Password hashing using **bcrypt**
-* Secure session handling with **JWT (JSON Web Tokens)**
-
-### 2️⃣ Authenticated Dashboard
-
-* Add or remove favorite news topics
-* Enable or disable email subscription
-* View user profile and subscription status
-* Trigger **manual news digest emails**
-
-### 3️⃣ News & Email Integration
-
-* Fetches real-time news using a **News API**
-* Sends personalized emails using **Brevo (Sendinblue) API**
-* Two delivery modes:
-
-  * **Manual** – User-triggered from dashboard
-  * **Automatic** – Scheduled using cron jobs
-
-### 4️⃣ Scheduled Email Delivery
-
-* Iterates over all subscribed users
-* Fetches topic-based news for each user
-* Sends personalized email digests
-* Schedule:
-
-  * Development: Every **5 minutes**
-  * Production: Every **12 hours**
+* **User Authentication:** Secure registration and login using **JWT** and **bcrypt** password hashing.
+* **Real-time News:** Integration with **News API** to fetch the latest headlines for user-selected topics.
+* **Reliable Email Service:** Powered by **Nodemailer** using a secure SMTP relay (Gmail App Passwords).
+* **Serverless Cron Jobs:** Automated 12-hour delivery cycles managed via `vercel.json` configurations.
 
 ---
 
 ## 🏗️ System Architecture
 
-```
+```text
 Frontend (React + Tailwind)
         │
         ▼
 Vercel Serverless APIs (/api)
         │
-        ├── Authentication (JWT)
-        ├── News API Integration
-        ├── Brevo Email Service
-        └── Cron Job Scheduler
-```
+        ├── Auth Service (JWT + MongoDB)
+        ├── News Fetcher (News API)
+        ├── Mail Dispatcher (Nodemailer SMTP)
+        └── Cron Scheduler (Vercel Crons)
 
----
-
-## 🗂️ Project Structure
-
-```
-personalized-news-digest/
-│
-├── frontend/                  # React frontend
-│   ├── src/
-│   │   ├── components/
-│   │   ├── pages/
-│   │   ├── services/
-│   │   └── App.jsx
-│   └── package.json
-│
-├── api/                        # Vercel serverless backend
-│   ├── config/
-│   ├── models/
-│   ├── utils/
-│   ├── register.js
-│   ├── login.js
-│   ├── profile.js
-│   ├── updateTopics.js
-│   ├── sendDigest.js
-│   └── cronDigest.js
-│
-├── vercel.json                 # Cron and routing configuration
-├── package.json
-├── build-and-move.js            #helper script
-└── README.md
 ```
 
 ---
 
 ## 🛠️ Tech Stack
 
-### Frontend
-
-* React
-* Vite
-* Tailwind CSS
-* Axios
-
-### Backend
-
-* Node.js
-* Vercel Serverless Functions
-* MongoDB + Mongoose
-* JWT Authentication
-
-### APIs & Services
-
-* News API (for fetching articles)
-* Brevo (Sendinblue) – Transactional Email API
-
-### Deployment
-
-* Vercel (Serverless hosting + Cron jobs)
+* **Frontend:** React, Vite, Tailwind CSS, Axios
+* **Backend:** Node.js, Vercel Serverless Functions
+* **Database:** MongoDB + Mongoose
+* **Email:** Nodemailer (SMTP)
+* **API:** News API
 
 ---
 
 ## 🔐 Environment Variables
 
-Configure the following variables:
+To run this project, you will need to add the following variables to your Vercel environment:
 
-```
+```text
 MONGO_URI=your_mongodb_connection_string
-JWT_SECRET=your_jwt_secret
+JWT_SECRET=your_jwt_secret_key
 NEWS_API_KEY=your_news_api_key
-BREVO_API_KEY=your_brevo_api_key
-EMAIL_FROM=verified_sender_email@domain.com
+EMAIL_USER=your_gmail_address@gmail.com
+EMAIL_PASS=your_16_digit_google_app_password
+
 ```
 
-⚠️ `EMAIL_FROM` must be a **verified sender** in Brevo.
-
----
-
-## 🚀 Deployment (Vercel)
-
-Deployed on vercel
-
-The frontend is served as static files and the backend runs as serverless functions under `/api`.
+> **Note:** For Gmail, you must use an **App Password**. Regular passwords will be blocked by Google's security.
 
 ---
 
 ## ⏱️ Cron Job Configuration
 
-The scheduled email delivery is configured in `vercel.json`:
+Automated digests are handled by Vercel’s native cron service.
 
-```
-"crons": [
-  {
-    "path": "/api/cronDigest",
-    "schedule": "*/5 * * * *"
-  }
-]
-```
-
-This triggers automatic email delivery every 5 minutes during development.
+* **Path:** `/api/cronDigest`
+* **Schedule:** `0 9 * * *` (Every 9 AM UTC)
 
 ---
 
-## 📧 Email Personalization
+## 🚀 Deployment
 
-Each email includes:
+This project is optimized for **Vercel**.
 
-* Personalized greeting with user name
-* Topic-based news articles
-* Clickable article links
-* Short article descriptions
-
----
-
-## ✅ How to Verify Functionality
-
-* Register and log in
-* Select favorite topics
-* Enable email subscription
-* Trigger **manual digest** from dashboard
-
----
-
-## 🧪 Future Enhancements
-
-* Email templates with better UI
-* Topic-based scheduling preferences
-* Push notifications
-* AI-based article summarization
+1. Push your code to GitHub.
+2. Connect your repository to Vercel.
+3. Configure the **Environment Variables** in the Vercel dashboard.
+4. The backend API routes under `/api` will be automatically recognized as Serverless Functions.
 
 ---
 
 ## 👩‍💻 Author
 
-**Chaithra P**
-Full Stack Developer
+**Chaithra P** Full Stack Developer
 
 ---
 
-## 📄 License
 
-This project is developed for educational and academic purposes.
+
