@@ -72,7 +72,7 @@ EMAIL_PASS=your_16_digit_google_app_password
 Automated digests are handled by Vercel’s native cron service.
 
 * **Path:** `/api/cronDigest`
-* **Schedule:** `0 9 * * *` (Every 9 AM UTC)
+* **Schedule:** `0 9 * * *` (Everyday at 9 AM UTC)
 
 ---
 
